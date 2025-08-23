@@ -13,7 +13,11 @@ dotenv.config();
 const app = express();
 await connectDB(); // <— call it!
 
-app.use(cors({ origin: process.env.FRONTEND_URL || true, credentials: true }));
+app.use(cors({
+    origin: [process.env.FRONTEND_URL,
+            "https://one-ai-one.vercel.app"],
+    credentials: true
+}));
 app.use(express.json());
 app.use(clerkMiddleware());
 

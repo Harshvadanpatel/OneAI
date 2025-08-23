@@ -6,7 +6,8 @@ import RightDashboard from "../components/RightDashboard";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL =
+  import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
 export default function Dashboard() {
   // local display state per model
