@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import "tailwindcss";
+
+
+* {
+  font-family: "Outfit", sans-serif;
+
+}
+
+
+@theme {
+  --color-primary:#161B22 ;
+        /* Dividers / card borders */
+}
+
+
+body {
+  background-color: #0D1117; /* Main dark background */
+  color: #FFFFFF;            /* Default text color */
+}
+
+.hero{
+    background: linear-gradient(135deg, #0D1117 0%, #161B22 50%, #1E293B 100%);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 6rem 2rem;
+}
+
+.reset-tw, .reset-tw *{
+  all: revert !important
+}
+
+
+/* ===== Scrollbar Styles ===== */
+
+/* Thin black scrollbar */
+
+
+.scrollbar-black {
+  scrollbar-width: thin;              /* For Firefox */
+  scrollbar-color: #181818 #282828;   /* thumb + track */
+}
+
+/* Chrome, Edge, Safari */
+.scrollbar-black::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-black::-webkit-scrollbar-track {
+  background: #181818;
+}
+
+.scrollbar-black::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 6px;
+}
+
+.scrollbar-black::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+

@@ -1,0 +1,26 @@
+.main{
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    background-color:#1e1e1e;
+}
+
+.box{
+    width:auto;
+    height: 120px;
+}
+
+.line{
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    background-color: #181818;
+    width:45px;
+    height:20px;
+}
+
+.a{
+    
+}
