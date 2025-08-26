@@ -36,21 +36,22 @@ export default function Dashboard() {
   };
 
   const createNewChat = async () => {
-    const res = await axios.post("/api/chat/create", { name: "New Chat" }, await authHeader());
-    if (res.data.success) {
-      setActiveChatId(res.data.chat._id);
-      await refreshChats();
-      // clear local messages
-      setChatMessages({
-        ChatGPT: [],
-        Gemini: [],
-        DeepSeek: [],
-        Perplexity: [],
-        Claude: [],
-        Grok: [],
-      });
-    }
-  };
+  const res = await axios.post("/api/chat/create", {}, await authHeader()); // 👈 no name
+  if (res.data.success) {
+    setActiveChatId(res.data.chat._id);
+    await refreshChats();
+    // clear local messages
+    setChatMessages({
+      ChatGPT: [],
+      Gemini: [],
+      DeepSeek: [],
+      Perplexity: [],
+      Claude: [],
+      Grok: [],
+    });
+  }
+};
+
 
   const loadChat = async (chatId) => {
     const res = await axios.get(`/api/chat/${chatId}`, await authHeader());

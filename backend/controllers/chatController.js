@@ -18,16 +18,16 @@ export const createChat = async (req, res) => {
 
     const user = await clerkClient.users.getUser(userId);
 
-    // count existing chats for this user
+    // Count how many chats user already has
     const count = await Chat.countDocuments({ userId });
 
-    // generate unique default name
-    const defaultName = `Chat ${count + 1}`;
+    // Auto-generate chat name → Chat 1, Chat 2, Chat 3...
+    const chatName = `Chat ${count + 1}`;
 
     const chat = await Chat.create({
       userId,
       userName: user.firstName || "Anonymous",
-      name: req.body?.name || defaultName, // fallback if no name given
+      name: chatName,
       messages: [],
     });
 
@@ -39,6 +39,7 @@ export const createChat = async (req, res) => {
       .json({ success: false, message: "Server error: " + error.message });
   }
 };
+
 
 
 export const getChats = async (req, res) => {
