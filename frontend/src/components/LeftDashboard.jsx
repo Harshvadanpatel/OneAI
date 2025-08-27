@@ -67,7 +67,7 @@ const LeftDashboard = ({
         onClick={() => navigate("/")}
       />
 
-      <button onClick={onNewChat} className="bg-white cursor-pointer  text-[#2c2c2c] mt-5 py-2 px-4 rounded-xl mb-4 ">
+      <button onClick={onNewChat} className="bg-white  text-[#2c2c2c] mt-5   cursor-pointer py-2 px-4 rounded-xl mb-4 ">
         + New Chat
       </button>
 
