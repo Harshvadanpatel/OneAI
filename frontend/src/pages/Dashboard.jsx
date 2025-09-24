@@ -153,27 +153,34 @@ export default function Dashboard() {
     await refreshChats();
   };
 
-  return (
-    <div className="flex w-auto h-screen">
-      {/* Sidebar */}
-      <div className="w-1/5">
-        <LeftDashboard
-          chats={chats}
-          onNewChat={createNewChat}
-          onSelectChat={loadChat}
-          activeChatId={activeChatId}
-        />
-      </div>
 
-      {/* Right side */}
-      <div className="w-4/5 overflow-y-hidden">
-        <div className="inline justify-start overflow-hidden">
-          <RightDashboard chatMessages={chatMessages} />
-          <div className="flex">
-            <InputArea onSendMessage={handleSend} />
-          </div>
-        </div>
-      </div>
+  return (
+<div className="flex w-screen h-screen">
+  {/* Sidebar - 1/5 width, full height */}
+  <div className="w-1/5 h-full">
+    <LeftDashboard
+      chats={chats}
+      onNewChat={createNewChat}
+      onSelectChat={loadChat}
+      activeChatId={activeChatId}
+    />
+  </div>
+
+  {/* Right side - 4/5 width */}
+  <div className="w-4/5 h-full flex flex-col">
+    {/* Chat panels - 4/5 height */}
+    <div className=" overflow-auto">
+      <RightDashboard chatMessages={chatMessages} />
     </div>
+
+    {/* Input area - 1/5 height */}
+    <div className="h-1/5 flex-shrink-0">
+      <InputArea onSendMessage={handleSend} />
+    </div>
+  </div>
+</div>
+
+
+
   );
 }

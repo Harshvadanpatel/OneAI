@@ -5,10 +5,10 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const AITool = ({ name, icon, chatMessages, user }) => (
-  <div className="flex flex-col border border-white/20 bg-[#1e1e1e]">
+<div className="flex flex-col border border-white/20 bg-[#1e1e1e]  h-[77vh]">
     {/* Header */}
     <div className="flex border border-white/20 justify-between h-15 w-120 bg-[#181818]">
-      <div className="p-5 gap-2 flex items-center">
+      <div className="p-5 gap-2 mt-1 flex items-center">
         <img src={icon} alt={`${name} logo`} className="h-5 w-5" />
         <span>{name}</span>
       </div>
@@ -69,7 +69,7 @@ const RightDashboard = ({ chatMessages }) => {
   const { user } = useUser();
 
   const aiTools = [
-    { name: "ChatGPT" ,icon: assets.openai },
+    { name: "ChatGPT" ,icon: assets.chatgpt },
     { name: "Gemini", icon: assets.gemini },
     { name: "DeepSeek", icon: assets.deepseek },
     { name: "Perplexity", icon: assets.perplexity },
@@ -78,8 +78,8 @@ const RightDashboard = ({ chatMessages }) => {
   ];
 
   return (
-    <div className="overflow-x-scroll scrollbar-blue">
-      <div className="flex h-136 gap-4">
+    <div className="overflow-x-scroll  scrollbar-blue">
+      <div className="flex h-auto gap-4">
         {aiTools.map((tool, i) => (
           <AITool
             key={i}

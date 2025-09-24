@@ -13,7 +13,7 @@ const InputArea = ({ onSendMessage }) => {
   };
 
   return (
-    <footer className="w-full h-[20%] bg-[#1e1e1e] border-t border-gray-500 p-4 flex items-center justify-center ">
+    <footer className="w-full h-auto bg-[#1e1e1e] border-t border-gray-500 p-4 flex items-center justify-center ">
       <div className="bg-[#181818] flex justify-between items-center p-4 h-28 w-210 rounded-2xl shadow-lg border border-white/20">
         <textarea
           ref={inputRef}
