@@ -1,37 +1,42 @@
+
+
 import "dotenv/config";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import OpenAI from "openai";
-
-const AI = new OpenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export const generate = async (req, res) => {
     try {
-        const { userId } = req.auth();
         const { prompt } = req.body;
 
-        const response = await AI.chat.completions.create({
-            model: "gemini-2.0-flash",
-            messages: [{
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-            temperature :0.7,
-            
+        if (!prompt) {
+            return res.status(400).json({ success: false, message: "Prompt is required" });
+        }
+
+        // Use a 2026-supported model ID
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash-lite", 
         });
 
-        const content = response.choices[0].message.content;
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
 
-        res.json({success:true,content})
-
+        return res.json({ success: true, content: text });
 
     } catch (error) {
+        console.error("Gemini Error:", error);
 
-        console.log(error.message)
-        res.json({success:false,message:error.message})
+        // Handle the specific 404 for retired models
+        if (error.status === 404) {
+            return res.status(404).json({
+                success: false,
+                message: "The requested model is retired. Please use 'gemini-2.5-flash-lite' instead.",
+            });
+        }
 
+        return res.status(error.status || 500).json({
+            success: false,
+            message: error.message,
+        });
     }
-}
+};
