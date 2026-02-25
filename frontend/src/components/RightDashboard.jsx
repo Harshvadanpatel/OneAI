@@ -1,13 +1,24 @@
-import { Maximize2 } from "lucide-react";
+import { Maximize2, Lock } from "lucide-react";
 import { useUser } from "@clerk/clerk-react";
 import { assets } from "../assets/assets";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import "./RightDashboard.css";
 
-const AITool = ({ name, icon, chatMessages, user }) => (
-<div className="flex flex-col border border-white/20 bg-[#1e1e1e]  h-[77vh]">
+const AITool = ({ name, icon, chatMessages, user, isLocked }) => (
+<div className={`flex flex-col border border-white/20 bg-[#1e1e1e] h-[77vh] relative ${isLocked ? "locked-tool" : ""}`}>
+    {/* Lock Overlay */}
+    {isLocked && (
+      <div className="lock-overlay absolute inset-0 rounded-lg flex items-center justify-center z-10 pointer-events-none top-15">
+        <div className="lock-badge flex flex-col items-center gap-2">
+          <Lock className="h-8 w-8 text-yellow-400" />
+          <span className="text-sm text-yellow-400 font-semibold">Upgrade</span>
+        </div>
+      </div>
+    )}
+    
     {/* Header */}
-    <div className="flex border border-white/20 justify-between h-15 w-120 bg-[#181818]">
+    <div className={`flex border border-white/20 justify-between h-15 w-120 bg-[#181818]`}>
       <div className="p-5 gap-2 mt-1 flex items-center">
         <img src={icon} alt={`${name} logo`} className="h-5 w-5" />
         <span>{name}</span>
@@ -18,7 +29,7 @@ const AITool = ({ name, icon, chatMessages, user }) => (
     </div>
 
     {/* Messages */}
-    <div className="overflow-y-auto scrollbar-black w-120  overflow-x-auto p-3">
+    <div className={`overflow-y-auto scrollbar-black w-120 overflow-x-auto p-3 ${isLocked ? "opacity-40 pointer-events-none" : ""}`}>
       {chatMessages && chatMessages.length > 0 ? (
         chatMessages.map((msg, i) => (
           <div
@@ -69,12 +80,12 @@ const RightDashboard = ({ chatMessages }) => {
   const { user } = useUser();
 
   const aiTools = [
-    { name: "ChatGPT" ,icon: assets.chatgpt },
-    { name: "Gemini", icon: assets.gemini },
-    { name: "DeepSeek", icon: assets.deepseek },
-    { name: "Perplexity", icon: assets.perplexity },
-    { name: "Claude", icon: assets.claude },
-    { name: "Grok", icon: assets.grok },
+    { name: "ChatGPT", icon: assets.chatgpt, isLocked: false },
+    { name: "Gemini", icon: assets.gemini, isLocked: false },
+    { name: "DeepSeek", icon: assets.deepseek, isLocked: false },
+    { name: "Perplexity", icon: assets.perplexity, isLocked: true },
+    { name: "Claude", icon: assets.claude, isLocked: true },
+    { name: "Grok", icon: assets.grok, isLocked: true },
   ];
 
   return (
@@ -87,6 +98,7 @@ const RightDashboard = ({ chatMessages }) => {
             icon={tool.icon}
             chatMessages={chatMessages[tool.name] || []}
             user={user}
+            isLocked={tool.isLocked}
           />
         ))}
       </div>

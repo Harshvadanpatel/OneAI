@@ -24,3 +24,27 @@
 .a{
     
 }
+
+/* Locked Tool Styling */
+.locked-tool {
+    position: relative;
+}
+
+.locked-tool .lock-overlay {
+    background: linear-gradient(135deg, rgba(13, 13, 13, 0.85), rgba(20, 20, 20, 0.9));
+    backdrop-filter: blur(2px);
+    border-radius: 0 0 8px 8px;
+}
+
+.lock-badge {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 2px solid rgba(250, 204, 21, 0.5);
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.2);
+}
+
+.lock-badge span {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
