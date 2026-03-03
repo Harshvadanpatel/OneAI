@@ -4,12 +4,15 @@ import InputArea from "../components/InputArea";
 import LeftDashboard from "../components/LeftDashboard";
 import RightDashboard from "../components/RightDashboard";
 import axios from "axios";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser, useSession } from "@clerk/clerk-react";
 
 axios.defaults.baseURL =
   import.meta.env.VITE_BASE_URL || "http://localhost:5000";
 
 export default function Dashboard() {
+  const { user, isLoaded } = useUser();
+  const { session } = useSession();
+
   // local display state per model
   const [chatMessages, setChatMessages] = useState({
     ChatGPT: [],
@@ -24,6 +27,45 @@ export default function Dashboard() {
   const [activeChatId, setActiveChatId] = useState(null);
   const [loading, setLoading] = useState(false);
   const { getToken } = useAuth();
+
+  // Helper function to decode JWT and get claims
+  const decodeTokenClaims = async () => {
+    try {
+      const token = await getToken();
+      if (!token) return null;
+
+      const parts = token.split(".");
+      if (parts.length !== 3) return null;
+
+      return JSON.parse(atob(parts[1]));
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return null;
+    }
+  };
+
+  const [tokenClaims, setTokenClaims] = useState(null);
+  const [claimsLoaded, setClaimsLoaded] = useState(false);
+
+  // Get token claims on mount
+  useEffect(() => {
+    if (!claimsLoaded) {
+      decodeTokenClaims().then((claims) => {
+        if (claims) setTokenClaims(claims);
+        setClaimsLoaded(true);
+      });
+    }
+  }, []);
+
+  // Reload user data on mount
+  useEffect(() => {
+    if (isLoaded && user) {
+      user.reload();
+    }
+  }, [isLoaded]);
+
+  // Check premium status from JWT token
+  const isPremium = tokenClaims?.pla === "u:premium";
 
   // helpers
   const authHeader = async () => ({
@@ -163,6 +205,7 @@ export default function Dashboard() {
       onNewChat={createNewChat}
       onSelectChat={loadChat}
       activeChatId={activeChatId}
+      isPremium={isPremium}
     />
   </div>
 
@@ -170,7 +213,7 @@ export default function Dashboard() {
   <div className="w-4/5 h-full flex flex-col">
     {/* Chat panels - 4/5 height */}
     <div className=" overflow-auto">
-      <RightDashboard chatMessages={chatMessages} />
+      <RightDashboard chatMessages={chatMessages} isPremium={isPremium} />
     </div>
 
     {/* Input area - 1/5 height */}

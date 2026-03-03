@@ -1,7 +1,7 @@
 // components/LeftDashboard.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { assets } from "../assets/assets";
-import { Protect, useClerk, useUser, useAuth } from "@clerk/clerk-react";
+import { useClerk, useUser, useAuth } from "@clerk/clerk-react";
 import { LogOut, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,7 @@ const LeftDashboard = ({
   onNewChat,
   onSelectChat,
   activeChatId,
+  isPremium = false,
   refreshChats, // optional fn from parent to reload list
   setChats,     // optional state setter from parent
 }) => {
@@ -18,6 +19,13 @@ const LeftDashboard = ({
   const { user, isLoaded, isSignedIn } = useUser();
   const { signOut, openUserProfile } = useClerk();
   const { getToken } = useAuth();
+
+  // Force reload user data on mount to get latest subscription
+  useEffect(() => {
+    if (isLoaded && user) {
+      user.reload();
+    }
+  }, [isLoaded]);
 
   if (!isLoaded || !isSignedIn) {
     return (
@@ -100,14 +108,12 @@ const LeftDashboard = ({
       </div>
 
       <div className=" w-full border-t  border-gray-500 p-4  px-7 flex items-center justify-between">
-        <div onClick={openUserProfile} className="flex gap-2 items-center cursor-pointer" >
+        <div onClick={openUserProfile} className="flex gap-2 items-center cursor-pointer hover:opacity-80 transition" >
           <img src={user.imageUrl} className="w-8 rounded-full" alt="user avatar" />
           <div>
             <h1 className="text-sm font-medium">{user.fullName}</h1>
-            <p className="text-xs text-gray-500">
-              <Protect plan="premium" fallback="Free">
-                Premium
-              </Protect> Plan
+            <p className={`text-xs font-semibold ${isPremium ? "text-yellow-400" : "text-gray-400"}`}>
+              {isPremium ? "⭐ Premium Plan" : "⚪ Free Plan"}
             </p>
           </div>
         </div>

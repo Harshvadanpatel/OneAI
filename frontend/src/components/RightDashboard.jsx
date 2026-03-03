@@ -1,18 +1,21 @@
 import { Maximize2, Lock } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+import { useUser, useClerk } from "@clerk/clerk-react";
 import { assets } from "../assets/assets";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import "./RightDashboard.css";
 
-const AITool = ({ name, icon, chatMessages, user, isLocked }) => (
+const AITool = ({ name, icon, chatMessages, user, isLocked, onUpgradeClick }) => (
 <div className={`flex flex-col border border-white/20 bg-[#1e1e1e] h-[77vh] relative ${isLocked ? "locked-tool" : ""}`}>
     {/* Lock Overlay */}
     {isLocked && (
-      <div className="lock-overlay absolute inset-0 rounded-lg flex items-center justify-center z-10 pointer-events-none top-15">
+      <div 
+        className="lock-overlay absolute inset-0 rounded-lg flex items-center justify-center z-10 top-15 cursor-pointer hover:bg-black/20 transition-all"
+        onClick={onUpgradeClick}
+      >
         <div className="lock-badge flex flex-col items-center gap-2">
           <Lock className="h-8 w-8 text-yellow-400" />
-          <span className="text-sm text-yellow-400 font-semibold">Upgrade</span>
+          <span className="text-sm text-yellow-400 font-semibold">Upgrade to Premium</span>
         </div>
       </div>
     )}
@@ -76,16 +79,28 @@ const AITool = ({ name, icon, chatMessages, user, isLocked }) => (
   </div>
 );
 
-const RightDashboard = ({ chatMessages }) => {
+const RightDashboard = ({ chatMessages, isPremium = false }) => {
   const { user } = useUser();
+  const { openUserProfile } = useClerk();
+
+  const handleUpgradeClick = () => {
+    openUserProfile({ 
+      appearance: {
+        elements: {
+          rootBox: "mx-auto",
+          card: "bg-[#1e1e1e] border border-white/20"
+        }
+      }
+    });
+  };
 
   const aiTools = [
     { name: "ChatGPT", icon: assets.chatgpt, isLocked: false },
     { name: "Gemini", icon: assets.gemini, isLocked: false },
     { name: "DeepSeek", icon: assets.deepseek, isLocked: false },
-    { name: "Perplexity", icon: assets.perplexity, isLocked: true },
-    { name: "Claude", icon: assets.claude, isLocked: true },
-    { name: "Grok", icon: assets.grok, isLocked: true },
+    { name: "Perplexity", icon: assets.perplexity, isLocked: !isPremium },
+    { name: "Claude", icon: assets.claude, isLocked: !isPremium },
+    { name: "Grok", icon: assets.grok, isLocked: !isPremium },
   ];
 
   return (
@@ -96,6 +111,7 @@ const RightDashboard = ({ chatMessages }) => {
             key={i}
             name={tool.name}
             icon={tool.icon}
+            onUpgradeClick={handleUpgradeClick}
             chatMessages={chatMessages[tool.name] || []}
             user={user}
             isLocked={tool.isLocked}
