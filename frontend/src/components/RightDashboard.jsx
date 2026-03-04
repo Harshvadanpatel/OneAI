@@ -23,7 +23,7 @@ const AITool = ({ name, icon, chatMessages, user, isLocked, onUpgradeClick }) =>
     {/* Header */}
     <div className={`flex border border-white/20 justify-between h-15 w-120 bg-[#181818]`}>
       <div className="p-5 gap-2 mt-1 flex items-center">
-        <img src={icon} alt={`${name} logo`} className="h-5 w-5" />
+        <img src={icon} alt={`${name} logo`} className="h-8 w-8" />
         <span>{name}</span>
       </div>
       <div className="flex p-5 gap-2 items-center">
@@ -42,7 +42,7 @@ const AITool = ({ name, icon, chatMessages, user, isLocked, onUpgradeClick }) =>
           >
             <img
               src={msg.role === "user" ? user.imageUrl : icon}
-              className="w-8 mx-3 mt-1 h-8 rounded-full"
+              className="w-8 mx-3 mt-3 h-8 rounded-full"
               alt={msg.role}
             />
             <div className="mx-2 mt-1 reset-tw prose prose-invert break-words whitespace-pre-wrap w-[400px]">
